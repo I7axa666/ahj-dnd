@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DND</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>DND</title>
 </head>
 <body>
-  <div class="todo">
-    todo
-    <ul class="tasks">
-      <li><div class="task">Enter a title for this card...</div></li><li><div class="task">Enter a title for this card...</div></li><li><div class="task">Enter a title for this card...</div></li>
-    </ul>
-    <button class="btn"> &#43; Add another card</button>
-  </div>
-  <div class="in-progress">
-    in progress
-    <ul class="tasks">
-    </ul>
-    <button class="btn"> &#43; Add another card</button>
-  </div>
-  <div class="done">
-    done
-    <ul class="tasks">
-    </ul>
-    <button class="btn"> &#43; Add another card</button>
-  </div>
+  <div class="container">
+    <div class="column" id="todo">
+        <h2>TODO</h2>
+        <div class="tasks"></div>
+        <button class="add-task-btn">ADD ANOTHER TASK</button>
+    </div>
+    <div class="column" id="inProgress">
+        <h2>IN PROGRESS</h2>
+        <div class="tasks"></div>
+        <button class="add-task-btn">ADD ANOTHER TASK</button>
+    </div>
+    <div class="column" id="done">
+        <h2>DONE</h2>
+        <div class="tasks"></div>
+        <button class="add-task-btn">ADD ANOTHER TASK</button>
+    </div>
+</div>
 </body>
 </html>

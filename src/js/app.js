@@ -1,25 +1,29 @@
-import Task from '../js/classTask';
-import { addTask, addCloseButton, deleteCloseButton } from '../js/utilits';
+import TaskManadger from './listener';
 
-const taskList = document.querySelectorAll('.tasks');
-const btnList = document.querySelectorAll('.btn');
+// localStorage.clear();
 
-
-
-btnList.forEach(btn => {
-  btn.addEventListener('click', (ev) => {
-    addTask(ev.target);
+window.addEventListener('beforeunload', () => {
+  localStorage.clear();
+  const column = document.querySelectorAll('.column');
+  column.forEach((el) => {
+    const columnName = el.id;
+    const tasks = el.querySelector('.tasks');
+    localStorage.setItem(columnName, tasks.outerHTML);
   });
 });
 
-taskList.forEach(el => {
-  el.addEventListener('click', (el) => {
-    console.log(el.target);
-  });
+if (localStorage.length > 0) {
+  for (let i = 0; i < localStorage.length; i++) {
+    const column = localStorage.key(i);
+    const taskList = localStorage.getItem(column);
 
-  el.addEventListener('mouseover', addCloseButton);
+    const board = document.querySelector(`#${column}`);
+    const btn = board.querySelector('.add-task-btn');
+    board.querySelector('.tasks').remove();
+    const div = document.createElement('div');
+    div.innerHTML = taskList;
+    board.insertBefore(div, btn);
+  }
+}
 
-  el.addEventListener('mouseout', deleteCloseButton);
-
-  
-});
+new TaskManadger(document.querySelector('.container'));

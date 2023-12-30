@@ -1,67 +1,106 @@
 body {
-  background-color: blue;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+
 }
 
-ul {
-  list-style-type: none;
+button {
+  width: 90%;
 }
 
-li {
+.container {
   display: flex;
+  justify-content: space-between;
+  padding: 20px;
+
+  position: relative;
 }
 
-.todo, .in-progress, .done {
-width: 30%;
-margin-left: auto;
-margin-right: auto;
-display: inline-block;
-
-background-color: beige;
-
-color: rgb(84, 82, 82);
-text-transform: uppercase;
-font-weight: bold;
-
+.column {
+  width: 30%;
+  background-color: #e0e0e0;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.task {
-  color: black;
-  border: 3px solid green;
+.tasks {
+  min-height: 20px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.tasks input {
+  flex-grow: 1;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.add-task-btn {
   width: 100%;
-  margin-left: 0;
-
+  border: none;
   cursor: pointer;
 
 }
 
-.btn {
-  color: black;
-  width: 100%;
-  text-align: left;
+.task-card {
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
 
+.btn-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.close-btn {
+  cursor: pointer;
+}
+
+.task {
+  width: 350px;
+  height: 4vw;
+  background-color: #ffffff;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  position: relative;
+  
+}
+
+.delete-task {
+  cursor: pointer;
+  position: absolute;
+
+  right: 10px;
+
+}
+
+.hidden {
+  display: none;
 }
 
 .dragged {
-  border-radius: 10px;
+  cursor: grabbing;
+
   position: absolute;
-  z-index: 10;
-  pointer-events: none;
-  width: 20%;
-}
-
-textarea {
-  width: 98%;
-}
-
-.btn-selected {
-  width: 30%;
-  background-color: rgb(93, 221, 93);
-  border-radius: 5%;
-}
-
-.close {
-  float: right;
-  margin-right: 10%;
   z-index: 99;
+
+  pointer-events: none;
 }
 
+.hovered {
+  background-color: aqua;
+}
+
+.clone {
+  background-color: black;
+}
