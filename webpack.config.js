@@ -2,6 +2,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
+  devServer: {
+    port: 9000,
+  },
   devtool: 'source-map',
   module: {
     rules: [

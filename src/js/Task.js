@@ -3,7 +3,7 @@ export default class Task {
     this.container = document.querySelector('.container');
     this.columnName = columnName;
     this.onDelete = onDelete;
-    this.actualElement = '';
+    this.actualElement = null;
 
     this.element = document.createElement('div');
     this.element.className = 'task-card';
@@ -30,11 +30,6 @@ export default class Task {
     this.element.appendChild(this.buttonContainer);
 
     this.input.focus();
-
-    this.mouseDown = this.mouseDown.bind(this);
-    this.mouseUp = this.mouseUp.bind(this);
-    this.mouseOver = this.mouseOver.bind(this);
-
     this.tasksList = [];
   }
 
@@ -66,34 +61,6 @@ export default class Task {
       deletTaskBtn.classList.add('hidden');
     });
 
-    taskContainer.addEventListener('mousedown', this.mouseDown);
-
     this.element.remove();
-  }
-
-  mouseDown(event) {
-    event.preventDefault();
-
-    if (!event.target.classList.contains('delete-task')) {
-      this.actualElement = event.target;
-      this.actualElement.classList.add('dragged');
-
-      document.documentElement.addEventListener('mouseup', this.mouseUp);
-      document.documentElement.addEventListener('mouseover', this.mouseOver);
-    }
-  }
-
-  mouseUp() {
-    this.actualElement.classList.remove('dragged');
-    this.actualElement = undefined;
-
-    document.documentElement.removeEventListener('mouseup', this.mouseUp);
-    document.documentElement.removeEventListener('mouseover', this.mouseOver);
-  }
-
-  mouseOver(event) {
-    event.preventDefault();
-    this.actualElement.style.top = `${event.clientY}px`;
-    this.actualElement.style.left = `${event.clientX}px`;
   }
 }

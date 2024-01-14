@@ -73,7 +73,10 @@ button {
   margin-bottom: 20px;
   border-radius: 5px;
   position: relative;
-  
+}
+
+.task:active {
+	background-color: #f5d8d8;
 }
 
 .delete-task {

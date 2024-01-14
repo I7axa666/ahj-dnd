@@ -15,11 +15,20 @@ export default class TaskManadger {
     this.progressBtn.addEventListener('click', this.addTask.bind(this, 'inProgress'));
     this.doneBtn.addEventListener('click', this.addTask.bind(this, 'done'));
 
-    this.actualElement = '';
-    this.actualElementClone = '';
+    this.actualElement = null;
+    this.actualElementStyle = null;
+    this.actualElementClone = null;
+
+    this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
-    this.onMouseOver = this.onMouseOver.bind(this);
-    this.dragAndDrop = this.dragAndDrop.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
+    this.clear = this.clear.bind(this);
+    this.proectionAct = this.proectionAct.bind(this);
+    this.proection = this.proection.bind(this);
+    this.replaceDragging = this.replaceDragging.bind(this);
+
+    this.shiftX = null;
+    this.shiftY = null;
 
     this.start();
   }
@@ -45,8 +54,6 @@ export default class TaskManadger {
         const deleteBtn = task.querySelector('.delete-task');
         deleteBtn.classList.add('hidden');
       });
-
-      this.dragAndDrop(el);
     });
   }
 
@@ -63,54 +70,97 @@ export default class TaskManadger {
     taskCardElement.remove();
   }
 
-  onMouseOver(e) {
-    this.actualElement.style.top = `${e.clientY}px`;
-    this.actualElement.style.left = `${e.clientX}px`;
+  onMouseDown(e) {
+    const { target } = e;
+
+    if (target.classList.contains('task')) {
+      this.shiftX = e.offsetX;
+      this.shiftY = e.offsetY;
+      this.actualElement = target;
+      this.actualElementStyle = target.style;
+
+      this.proectionAct(e);
+    }
   }
 
-  dragAndDrop(el) {
-    el.addEventListener('mousedown', (e) => {
-      e.preventDefault();
+  onMouseUp() {
+    if (this.actualElement) {
+      this.replaceDragging();
+      this.clear();
+    }
+  }
 
-      if (!e.target.classList.contains('delete-task')) {
-        this.actualElement = e.target;
+  onMouseMove(e) {
+    e.preventDefault();
+    if (this.actualElement) {
+      const { pageX, pageY } = e;
+      const { width, height } = this.actualElement.style;
 
-        this.actualElementClone = this.actualElement.cloneNode(true);
-        this.actualElementClone.classList.add('clone');
+      this.actualElement.style = `
+        position: absolute;
+        left: ${pageX - this.shiftX}px;
+        top: ${pageY - this.shiftY}px;
+        pointer-events: none;
+        width: ${width};
+        height: ${height};
+      `;
+      this.proectionAct(e);
+    }
+  }
 
-        this.actualElement.parentElement.insertBefore(this.actualElementClone, this.actualElement);
+  clear() {
+    this.actualElement = null;
+    this.actualElementClone = null;
+    this.actualElementStyle = null;
+  }
 
-        this.actualElement.classList.add('dragged');
+  proectionAct(e) {
+    const { target } = e;
 
-        document.documentElement.addEventListener('mouseup', this.onMouseUp);
-        document.documentElement.addEventListener('mouseover', this.onMouseOver);
+    if (
+      target.classList.contains('task')
+      && !target.classList.contains('protaction')
+    ) {
+      const { y, height, width } = target.getBoundingClientRect();
+      const appendPosition = y + height / 2 > e.clientY
+        ? 'beforebegin'
+        : 'afterend';
+
+      if (!this.actualElementClone) {
+        this.actualElementClone = this.proection(target);
+
+        this.actualElementClone.style = `
+            width: ${width}px;
+            height: ${height}px;
+            margin: 10px 0px;
+          `;
+      } else {
+        this.actualElementClone.remove();
+        target.insertAdjacentElement(appendPosition, this.actualElementClone);
       }
-    });
+    } else if (target.classList.contains('tasks')) {
+      target.appendChild(this.actualElementClone);
+    }
+  }
+  // eslint-disable-next-line
+  proection(target) {
+    return (() => {
+      const d = document.createElement('div');
+      d.classList.add('proection');
+      const { width, height } = target.getBoundingClientRect();
+
+      d.style = `
+      width: ${width};
+      height: ${height};
+      margin: 10px 0;
+      `;
+
+      return d;
+    })();
   }
 
-  onMouseUp(e) {
-    const mouseUpItem = e.target;
-
-    const parentColumn = e.target.closest('.column');
-
-    const tasks = parentColumn.querySelector('.tasks');
-
-    if (mouseUpItem.classList.contains('tasks')) {
-      tasks.appendChild(this.actualElement);
-    } else {
-      tasks.insertBefore(this.actualElement, mouseUpItem);
-    }
-
-    this.actualElement.classList.remove('dragged');
-
-    if (document.querySelector('.clone')) {
-      document.querySelector('.clone').remove();
-    }
-
-    this.actualElement = undefined;
-    this.actualElementClone = undefined;
-
-    document.documentElement.removeEventListener('mouseup', this.onMouseUp);
-    document.documentElement.removeEventListener('mouseover', this.onMouseOver);
+  replaceDragging() {
+    this.actualElementClone.replaceWith(this.actualElement);
+    this.actualElement.style = this.actualElementStyle;
   }
 }
